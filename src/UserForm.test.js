@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import user from "@testing-library/user-event";
-import UserForm from "./Userform";
+import UserForm from "./UserForm";
 
 test("it shows 2 inputs and 1 button", () => {
   // render the component.
@@ -45,4 +45,25 @@ test("it calls onUserAdd when the form is submitted", async () => {
   // assertion to make sure "onUserAdd" gets called with email/name
   expect(mock).toHaveBeenCalled();
   expect(mock).toHaveBeenCalledWith({ name: "kabi", email: "kabi@gmail.com" });
+});
+
+test("empties the 2 inputs when the form is submitted", async () => {
+  render(<UserForm onUserAdd={() => {}} />);
+
+  const nameInput = screen.getByRole("textbox", { name: /name/i });
+  const emailInput = screen.getByRole("textbox", { name: /email/i });
+
+  await user.click(nameInput);
+  await user.keyboard("kabi");
+  await user.click(emailInput);
+  await user.keyboard("kabi@gmail.com");
+
+  // find the button
+  const button = screen.getByRole("button");
+
+  // simulate clicking the button
+  await user.click(button);
+
+  expect(nameInput).toHaveValue("");
+  expect(emailInput).toHaveValue("");
 });

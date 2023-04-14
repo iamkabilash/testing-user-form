@@ -7,6 +7,8 @@ function UserForm({ onUserAdd }) {
   const handleAddUser = (e) => {
     e.preventDefault();
     onUserAdd({ name, email });
+    setName("");
+    setEmail("");
   };
 
   return (

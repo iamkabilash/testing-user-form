@@ -1,14 +1,22 @@
 import { render, screen, within } from "@testing-library/react";
 import UserList from "./UserList";
 
-test("render 1 row per user", () => {
-  // render the component.
+// declaring a helper function, as its used by the 2 tests.
+// 2nd test needs [users], so we return and destructure when needed.
+function renderComponent() {
   const users = [
     { name: "kabi", email: "kabi@gmail.com" },
     { name: "shaaru", email: "shaaru@gmail.com" },
   ];
 
   render(<UserList users={users} />);
+
+  return { users };
+}
+
+test("render 1 row per user", () => {
+  // render the component.
+  renderComponent();
 
   // - destructure container to use querySelector
   // const { container } = render(<UserList users={users} />);
@@ -31,11 +39,7 @@ test("render 1 row per user", () => {
 
 test("render email and name of each user", () => {
   // render the component.
-  const users = [
-    { name: "kabi", email: "kabi@gmail.com" },
-    { name: "shaaru", email: "shaaru@gmail.com" },
-  ];
-  render(<UserList users={users} />);
+  const { users } = renderComponent();
 
   users.forEach((user) => {
     const name = screen.getByRole("cell", { name: user.name });
